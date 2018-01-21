@@ -3,6 +3,7 @@
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $twig->addGlobal('user', $app['session']->get('user'));
 
@@ -82,12 +83,19 @@ $app->post('/todo/add', function (Request $request) use ($app) {
         return $app->redirect('/login');
     }
 
+    
     $user_id = $user['id'];
     $description = $request->get('description');
     // a user can't add a todo without a description
     if ($description !=NULL){
         $sql = "INSERT INTO todos (user_id, description) VALUES ('$user_id', '$description')";
         $app['db']->executeUpdate($sql);
+        // set success flash messages
+        $app['session']->getFlashBag()->add('success', 'Record is added successfully');
+    }
+    else{
+        // set failure flash messages
+        $app['session']->getFlashBag()->add('warning', 'Record is not added!');
     }
 
     return $app->redirect('/todo');
@@ -98,7 +106,7 @@ $app->match('/todo/delete/{id}', function ($id) use ($app) {
 
     $sql = "DELETE FROM todos WHERE id = '$id'";
     $app['db']->executeUpdate($sql);
-
+    $app['session']->getFlashBag()->add('success', 'Record is deleted successfully');
     return $app->redirect('/todo');
 });
 

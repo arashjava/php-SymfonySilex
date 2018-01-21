@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
+
 <div class="col-md-4 col-md-offset-4">
     <h1>Todo List:</h1>
     <table class="table table-striped">
@@ -41,11 +42,28 @@
                 <td colspan="3">
                     <input type="textbox" name="description" class="small-6 small-center" placeholder="Description...">
                 </td>
+
                 <td>
                     <button type="submit" class="btn btn-sm btn-primary">Add</button>
                 </td>
+                                    <!--  show the FlashBag message - Add/ Delete Success --> 
+                {% for alert in app.session.flashbag.get('success') %}
+                   <td colspan="3">
+                           <div class="alert alert-success"><strong>{{ alert }}</strong></div>
+                   </div> </td>
+                {% endfor %}
+                
+                                     <!--  show the FlashBag message - Add/ Delete Warning --> 
+                {% for alert in app.session.flashbag.get('warning') %}
+                   <td colspan="3">
+                          <div class="alert alert-warning"><strong>{{ alert }}</strong></div>
+                   </div> </td>
+                {% endfor %}
             </form>
+
         </tr>
     </table>
+
+ 
 </div>
 {% endblock %}
