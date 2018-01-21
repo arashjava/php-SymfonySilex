@@ -89,3 +89,12 @@ $app->match('/todo/delete/{id}', function ($id) use ($app) {
 
     return $app->redirect('/todo');
 });
+
+// Confirmation that the task is completed / or change it back to not completed
+$app->match('/todo/completed/{id}', function ($id) use ($app) {
+
+    $sql = "update todos set completed = !completed WHERE id = '$id'";
+    $app['db']->executeUpdate($sql);
+
+    return $app->redirect('/todo');
+});
